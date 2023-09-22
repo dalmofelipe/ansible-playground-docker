@@ -42,5 +42,5 @@
 - name: Reload NGINX
   service:
     name: nginx
-    state: reload
+    state: reloaded
   when: site_content is changed
