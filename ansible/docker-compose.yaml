@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  ansible:
+    build: docker/
+    container_name: "ansible"
+    command: "sleep infinity"
+    links:
+      - "playground:playground"
+    volumes:
+      - $PWD/config:/etc/ansible
+      - $PWD/keys/ansible_key:/root/.ssh/id_rsa:ro
+  playground:
+    build:
+      context: docker/
+      dockerfile: playground.Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - $PWD/keys/ansible_key.pub:/root/.ssh/authorized_keys
