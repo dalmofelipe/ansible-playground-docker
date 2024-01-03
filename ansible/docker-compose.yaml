@@ -5,15 +5,27 @@ services:
     container_name: "ansible"
     command: "sleep infinity"
     links:
-      - "playground:playground"
+      - "webserver-ubuntu:webserver-ubuntu"
+      - "webserver-centos:webserver-centos"
     volumes:
       - $PWD/config:/etc/ansible
-      - $PWD/keys/ansible_key:/root/.ssh/id_rsa:ro
-  playground:
+      - $PWD/keys/ansible_key:/root/.ssh/id_rsa
+      - $PWD/keys/ansible_key.pub:/root/.ssh/id_rsa.pub
+  webserver-ubuntu:
     build:
       context: docker/
-      dockerfile: playground.Dockerfile
+      dockerfile: ubuntu_host.Dockerfile
+    container_name: webserver-ubuntu
     ports:
-      - 80:80
+      - 8080:80
+    volumes:
+      - $PWD/keys/ansible_key.pub:/root/.ssh/authorized_keys
+  webserver-centos:
+    build:
+      context: docker/
+      dockerfile: centos_host.Dockerfile
+    container_name: webserver-centos
+    ports:
+      - 9090:80
     volumes:
       - $PWD/keys/ansible_key.pub:/root/.ssh/authorized_keys

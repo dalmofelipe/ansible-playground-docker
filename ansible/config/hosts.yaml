@@ -2,6 +2,9 @@ all:
   vars:
     ansible_python_interpreter: /usr/bin/python3
   children:
-    web:
+    ubuntu:
       hosts:
-        ansible-playground-1:
+        webserver-ubuntu:
+    centos:
+      hosts:
+        webserver-centos:
