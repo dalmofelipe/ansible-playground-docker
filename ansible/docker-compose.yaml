@@ -8,18 +8,20 @@ services:
       - "webserver-ubuntu:webserver-ubuntu"
       - "webserver-centos:webserver-centos"
     volumes:
-      - $PWD/config:/etc/ansible
-      - $PWD/keys/ansible_key:/root/.ssh/id_rsa
-      - $PWD/keys/ansible_key.pub:/root/.ssh/id_rsa.pub
+      - ./config:/etc/ansible
+      - ./keys/ansible_key:/root/.ssh/id_rsa
+      - ./keys/ansible_key.pub:/root/.ssh/id_rsa.pub
   webserver-ubuntu:
     build:
       context: docker/
       dockerfile: ubuntu_host.Dockerfile
     container_name: webserver-ubuntu
+    cap_add:
+      - NET_ADMIN
     ports:
       - 8080:80
     volumes:
-      - $PWD/keys/ansible_key.pub:/root/.ssh/authorized_keys
+      - ./keys/ansible_key.pub:/root/.ssh/authorized_keys
   webserver-centos:
     build:
       context: docker/
@@ -28,4 +30,4 @@ services:
     ports:
       - 9090:80
     volumes:
-      - $PWD/keys/ansible_key.pub:/root/.ssh/authorized_keys
+      - ./keys/ansible_key.pub:/root/.ssh/authorized_keys
